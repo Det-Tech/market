@@ -15,7 +15,13 @@ const getInitialTheme = () => {
         return 'light' // light theme as the default;
     }
 }
-export const ThemeContext = React.createContext({})
+
+interface ThemeContextType {
+    theme: string;
+    setTheme: (theme: string) => void;
+  }
+  
+export const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ initialTheme, children }) => {
     const [theme, setTheme] = useState(getInitialTheme)
