@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 import HamburgerButton from './HamburgerMenuButton/HamburgerButton'
+import dashboard from '../assets/dashboard.svg'
+import liqudity from '../assets/liquidity.svg'
+import profit from '../assets/profit.svg'
+import oracle from '../assets/oracle.svg'
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true)
@@ -9,10 +13,10 @@ const Sidebar = () => {
   const location = useLocation()
 
   const Menus = [
-    { title: 'Dashboard', path: '/dashboard', src: "./assets/dashboard.svg" },
-    { title: 'Liquidity Pool', path: '/liquidity', src: "./assets/liquidity.svg" },
-    { title: 'Profit and Loss', path: '/profit', src: "./assets/profit.svg" },
-    { title: 'Data Oracles', path: '/oracle', src: "./assets/oracle.svg" },
+    { title: 'Dashboard', path: '/dashboard', src: dashboard },
+    { title: 'Liquidity Pool', path: '/liquidity', src: liqudity },
+    { title: 'Profit and Loss', path: '/profit', src: profit },
+    { title: 'Data Oracles', path: '/oracle', src: oracle },
   ]
 
   return (

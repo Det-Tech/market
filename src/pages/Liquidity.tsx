@@ -236,7 +236,7 @@ const Liquidity = () => {
     console.log("address ", account)
     showToast()
     fetchPoolDetails()
-  }, [account])
+  }, [])
 
     
   const delay = (ms) => {

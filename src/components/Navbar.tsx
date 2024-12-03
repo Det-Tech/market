@@ -2,6 +2,8 @@ import React from 'react'
 import Toggle from './ThemeToggle'
 import { useAccount, useEnsName } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import bell from '../assets/bell-020.svg'
+import down from '../assets/chevron-down0.svg'
 
 const Navbar = () => {
   const { address } = useAccount()
@@ -20,7 +22,7 @@ const Navbar = () => {
    
           <div className="navbar-alert-block">
             <div className="circle"></div>
-            <img className="navbar-bell" src="./assets/bell-020.svg" />
+            <img className="navbar-bell" src={bell} />
           </div>
 
           <div className="navbar-alert-block">
@@ -32,7 +34,7 @@ const Navbar = () => {
           <div className="navbar-profile">
 
             <div className="navbar-profile-name">Michael Ward </div>
-            <img className="chevron-down" src="./assets/chevron-down0.svg" />
+            <img className="chevron-down" src={down} />
           </div>
           
           <ConnectButton/>
