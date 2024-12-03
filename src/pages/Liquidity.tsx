@@ -794,7 +794,7 @@ const Liquidity = () => {
                         <tr key={index} className="border-b dark:border-neutral-500" onClick={()=>{setSelectedPoolData(pool); setSelectedPool(true)}}>
                           <td className="whitespace-nowrap px-6 py-4 font-medium">{index+1}</td>
                           <td className="whitespace-nowrap px-6 py-4">{pool.name}</td>
-                          <td className="whitespace-nowrap px-6 py-4 text-red-500" ><a href={`https://sepolia.etherscan.io/address/${pool.poolAddress}`}>{`${pool.poolAddress.slice(0,5)}...${pool.poolAddress.slice(-3)}`}</a></td>
+                          <td className="whitespace-nowrap px-6 py-4 text-red-500" ><a target="_blank" href={`https://sepolia.etherscan.io/address/${pool.poolAddress}`}>{`${pool.poolAddress.slice(0,5)}...${pool.poolAddress.slice(-3)}`}</a></td>
                           <td className="whitespace-nowrap px-6 py-4">{pool.size.toString()}</td>
                           <td className="whitespace-nowrap px-6 py-4">{pool.initialFundingAmount.toString()}</td>
                           <td className="whitespace-nowrap px-6 py-4">{pool.supportedLeagues}</td>
