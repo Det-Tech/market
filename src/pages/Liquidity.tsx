@@ -157,7 +157,7 @@ const Liquidity = () => {
 
   async function fetchPoolDetails() {
     console.log("chainId ", chainId)
-    const poolDetailsArray: any = await readContract(wagmiConfig, {
+    const poolDetailsArray: any = await readContract(config, {
       abi: factoryAbi,
       address: FACTORYCONTRACT,
       functionName: 'getPools',
@@ -307,9 +307,9 @@ const Liquidity = () => {
 
       console.log(tx)
 
-      // await waitForTransactionReceipt(wagmiConfig, { hash: tx, timeout: 60000 });
+      await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
       // console.log()
-      await publicClient.waitForTransactionReceipt({hash: tx})
+      // await publicClient.waitForTransactionReceipt({hash: tx})
       console.log(tx)
 
       toast.success("Created successfully", { id: tt, duration: 3000});
@@ -384,9 +384,9 @@ const Liquidity = () => {
             args: [poolAddress, depositAmountBigInt], // Approve the staking contract to spend your tokens
           });
 
-          await publicClient.waitForTransactionReceipt({hash: approvalTx})
+          // await publicClient.waitForTransactionReceipt({hash: approvalTx})
 
-        // const transactionReceipt = await waitForTransaction(config, { hash: approvalTx, timeout: 60000, chainId: 11155111 });
+        await waitForTransactionReceipt(config, { hash: approvalTx, timeout: 60000});
 
         console.log("approvalTx ", approvalTx)
       } else {
@@ -405,8 +405,8 @@ const Liquidity = () => {
 
       console.log(tx)
 
-      const res = await publicClient.waitForTransactionReceipt({hash: tx})
-      // const res = await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
+      // const res = await publicClient.waitForTransactionReceipt({hash: tx})
+      const res = await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
       console.log("success tx ", res)
       toast.success("Deposited successfully", { id: tt, duration: 3000});
 
@@ -433,8 +433,8 @@ const Liquidity = () => {
         args: args,
       })
 
-      const res = await publicClient.waitForTransactionReceipt({hash: tx})
-      // const res = await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
+      // const res = await publicClient.waitForTransactionReceipt({hash: tx})
+      const res = await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
 
       console.log("success withdraw", res)
       toast.success("Withdraw successfully", { id: tt, duration:3000});

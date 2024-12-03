@@ -10,6 +10,10 @@ export const config = getDefaultConfig({
   appName: 'Sport Market',
   projectId: '4447f850fb83e59da5840789a78f9876',
   chains: supportedChains,
+  transports: {
+    [mainnet.id]: http('https://mainnet.infura.io/v3/2ab0947ce26c439189703cae9c1814ac'),
+    [sepolia.id]: http('https://sepolia.infura.io/v3/2ab0947ce26c439189703cae9c1814ac'),
+  },
 });
 
 export const wagmiConfig = createConfig({
