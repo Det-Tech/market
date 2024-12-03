@@ -8,7 +8,7 @@ import CanvasJSReact from '@canvasjs/react-charts';
  
 import { writeContract, readContract, waitForTransactionReceipt, getTransactionReceipt, waitForTransaction } from '@wagmi/core';
 import { factoryAbi, poolAbi } from "./../web3/abi";
-import { config } from "./../wagmiConfig";
+import { config, wagmiConfig} from "./../wagmiConfig";
 import toast from "react-hot-toast";
 import { useAccount, useChainId,  } from 'wagmi'
 import {
@@ -39,7 +39,7 @@ const publicClient = createPublicClient({
 })
 
 
-const FACTORYCONTRACT = "0xBE9171E5Fc45c6B041C2FB52890522820761c737"
+const FACTORYCONTRACT = "0x0FA3AfeC1d2DdcFb587e9d15A7433DeA54441132"
 const tokenAddress = "0x9Ca28D22D474BfB5d57Cf5d1A1798693bC3974A9"
 
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -157,17 +157,18 @@ const Liquidity = () => {
 
   async function fetchPoolDetails() {
     console.log("chainId ", chainId)
-    const poolDetailsArray: any = await readContract(config, {
+    const poolDetailsArray: any = await readContract(wagmiConfig, {
       abi: factoryAbi,
       address: FACTORYCONTRACT,
       functionName: 'getPools',
+      chainId: 11155111
     })
     console.log("details ",poolDetailsArray)
      
     
     const poolsJson = poolDetailsArray.map(pool => ({
         poolAddress: pool.poolAddress,
-        name: pool.name,
+        name: pool.name, 
         size: pool.size,
         initialFundingAmount: pool.initialFundingAmount,
         supportedLeagues: pool.supportedLeagues,
@@ -238,6 +239,9 @@ const Liquidity = () => {
     fetchPoolDetails()
   }, [])
 
+  // setInterval(() =>{
+  //   fetchPoolDetails()
+  // }, 5000)
     
   const delay = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -297,17 +301,18 @@ const Liquidity = () => {
         address: FACTORYCONTRACT,
         functionName: 'createPool',
         args: args,
+        chainId: 11155111
       })
 
 
       console.log(tx)
 
-      // await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
-
+      // await waitForTransactionReceipt(wagmiConfig, { hash: tx, timeout: 60000 });
+      // console.log()
       await publicClient.waitForTransactionReceipt({hash: tx})
-      // console.log(transactionReceipt)
+      console.log(tx)
 
-      toast.success("Created successfully", { id: tt});
+      toast.success("Created successfully", { id: tt, duration: 3000});
 
     }catch(err){
       console.log("createPool ", err)
@@ -401,7 +406,7 @@ const Liquidity = () => {
       console.log(tx)
 
       const res = await publicClient.waitForTransactionReceipt({hash: tx})
-      // await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
+      // const res = await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
       console.log("success tx ", res)
       toast.success("Deposited successfully", { id: tt, duration: 3000});
 
@@ -429,6 +434,8 @@ const Liquidity = () => {
       })
 
       const res = await publicClient.waitForTransactionReceipt({hash: tx})
+      // const res = await waitForTransactionReceipt(config, { hash: tx, timeout: 60000 });
+
       console.log("success withdraw", res)
       toast.success("Withdraw successfully", { id: tt, duration:3000});
 
@@ -436,7 +443,7 @@ const Liquidity = () => {
       toast.error("Withdrawing Fail", { id: tt });
 
     }
-  }
+  } 
 
   return <div className='dark:text-white'>Liquidity
 

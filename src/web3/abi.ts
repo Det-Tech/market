@@ -1,4 +1,4 @@
-export const factoryAbi =  [
+export const factoryAbi =   [
   {
     "anonymous": false,
     "inputs": [
@@ -104,6 +104,11 @@ export const factoryAbi =  [
         "type": "address"
       },
       {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
         "internalType": "string",
         "name": "name",
         "type": "string"
@@ -152,6 +157,11 @@ export const factoryAbi =  [
           {
             "internalType": "address",
             "name": "poolAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenAddress",
             "type": "address"
           },
           {
@@ -217,6 +227,11 @@ export const factoryAbi =  [
           {
             "internalType": "address",
             "name": "poolAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenAddress",
             "type": "address"
           },
           {

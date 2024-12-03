@@ -1,7 +1,8 @@
 
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { arbitrum, base, mainnet, optimism, polygon, sepolia } from 'wagmi/chains';
-import { http, createConfig } from 'wagmi'
+import { http } from 'wagmi'
+import { createConfig,} from "@wagmi/core";
 
 const supportedChains: any = [mainnet, sepolia, polygon, optimism, arbitrum, base];
 
@@ -11,11 +12,11 @@ export const config = getDefaultConfig({
   chains: supportedChains,
 });
 
-export const config1 = createConfig({
+export const wagmiConfig = createConfig({
   // autoConnect: true, // Automatically connect user wallets if possible
   chains: supportedChains,
   transports: {
+    [sepolia.id]: http("https://sepolia.infura.io/v3/2ab0947ce26c439189703cae9c1814ac"),
     [mainnet.id]: http(),
-    [sepolia.id]: http(),
   },
 })
