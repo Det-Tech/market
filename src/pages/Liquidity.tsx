@@ -10,7 +10,7 @@ import { writeContract, readContract, waitForTransactionReceipt, getTransactionR
 import { factoryAbi, poolAbi } from "./../web3/abi";
 import { config } from "./../wagmiConfig";
 import toast from "react-hot-toast";
-import { useAccount, useEnsName } from 'wagmi'
+import { useAccount, useChainId,  } from 'wagmi'
 import {
   http,
   type Address,
@@ -114,8 +114,9 @@ const options = {
 }
 
 const Liquidity = () => {
-  const { address } = useAccount()
-  const { data, error, status } = useEnsName({ address })
+  // const { address } = useAccount()
+  const { address: account } = useAccount(); // Get the user's account address
+  const chainId = useChainId();
 
   const [showPoolList, setShowPoolList] = useState(false);
   const [allPools, setAllPools] = useState([]);
@@ -155,6 +156,7 @@ const Liquidity = () => {
 
 
   async function fetchPoolDetails() {
+    console.log("chainId ", chainId)
     const poolDetailsArray: any = await readContract(config, {
       abi: factoryAbi,
       address: FACTORYCONTRACT,
@@ -231,10 +233,10 @@ const Liquidity = () => {
   }
 
   useEffect(()=>{
-    console.log("address ", address)
+    console.log("address ", account)
     showToast()
     fetchPoolDetails()
-  }, [])
+  }, [account])
 
     
   const delay = (ms) => {
@@ -290,6 +292,8 @@ const Liquidity = () => {
 
       const tx = await writeContract(config, {
         abi:factoryAbi,
+        account,
+        chain: sepolia,
         address: FACTORYCONTRACT,
         functionName: 'createPool',
         args: args,
@@ -331,7 +335,7 @@ const Liquidity = () => {
           ],
           address: tokenAddress,
           functionName: 'allowance',
-          args: [address, poolAddress], // Owner is the user's address, spender is the staking contract address
+          args: [account, poolAddress], // Owner is the user's address, spender is the staking contract address
           chainId: 11155111
       });
 
@@ -351,27 +355,28 @@ const Liquidity = () => {
       
       const allowance = await getAllowance();
       if(allowance < depositAmount) {
-          // Approve the staking contract to spend your tokens
+          const depositAmountBigInt: any = depositAmount.toString(); // Convert to bigint
+
           const approvalTx = await writeContract(config, {
             abi: [
-                // Minimal ABI to approve tokens
-                {
-                    "constant": false,
-                    "inputs": [
-                        { "name": "spender", "type": "address" },
-                        { "name": "value", "type": "uint256" }
-                    ],
-                    "name": "approve",
-                    "outputs": [{ "name": "", "type": "bool" }],
-                    "payable": false,
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                }
-            ],
+              {
+                constant: false,
+                inputs: [
+                  { name: "spender", type: "address" },
+                  { name: "value", type: "uint256" },
+                ],
+                name: "approve",
+                outputs: [{ name: "", type: "bool" }],
+                payable: false,
+                stateMutability: "nonpayable",
+                type: "function",
+              },
+            ] as const, // Mark as readonly
+            account, // Include the user's account address
             address: tokenAddress, // ERC20 token contract address
             functionName: 'approve',
-            args: [poolAddress, depositAmount.toString()], // Approve the staking contract to spend your tokens
-            chainId: 11155111
+            chain: sepolia,
+            args: [poolAddress, depositAmountBigInt], // Approve the staking contract to spend your tokens
           });
 
           await publicClient.waitForTransactionReceipt({hash: approvalTx})
@@ -386,6 +391,8 @@ const Liquidity = () => {
 
       const tx = await writeContract(config, {
         abi:poolAbi,
+        account,
+        chain: sepolia,
         address: poolAddress,
         functionName: 'stake',
         args: args,
@@ -414,6 +421,8 @@ const Liquidity = () => {
       const poolAddress = (selectedPoolData as any).poolAddress;
       const tx = await writeContract(config, {
         abi: poolAbi,
+        account,
+        chain: sepolia,
         address: poolAddress,
         functionName: 'withdraw',
         args: args,
